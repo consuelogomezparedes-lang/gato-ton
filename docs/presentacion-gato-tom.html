@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Presentación - Gato Tom</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #1a1a2e;
+      color: #fff;
+      overflow: hidden;
+      height: 100vh;
+    }
+
+    .slide {
+      display: none;
+      height: 100vh;
+      width: 100%;
+      padding: 40px 60px;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      background: linear-gradient(135deg, #1a1a2e, #16213e);
+      position: relative;
+    }
+
+    .slide.active {
+      display: flex;
+      animation: fadeIn 0.6s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    h1 {
+      font-size: 3.2rem;
+      margin-bottom: 20px;
+      color: #e94560;
+      text-shadow: 0 0 15px rgba(233, 69, 96, 0.4);
+    }
+
+    h2 {
+      font-size: 2.4rem;
+      margin-bottom: 25px;
+      color: #0f3460;
+      background: #e94560;
+      padding: 10px 30px;
+      border-radius: 50px;
+    }
+
+    p {
+      font-size: 1.35rem;
+      max-width: 800px;
+      line-height: 1.7;
+      margin-bottom: 30px;
+      color: #eaeaea;
+    }
+
+    .slide img {
+      max-width: 55%;
+      max-height: 380px;
+      border-radius: 16px;
+      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5);
+      border: 4px solid #e94560;
+      margin-top: 10px;
+    }
+
+    /* Controles de navegación */
+    .controls {
+      position: fixed;
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 20px;
+      z-index: 100;
+    }
+
+    .controls button {
+      background: #e94560;
+      color: white;
+      border: none;
+      padding: 12px 28px;
+      font-size: 1.1rem;
+      border-radius: 50px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-weight: 600;
+    }
+
+    .controls button:hover {
+      background: #ff6b81;
+      transform: scale(1.05);
+    }
+
+    .controls button:disabled {
+      background: #555;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .progress {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 6px;
+      background: #e94560;
+      transition: width 0.4s ease;
+      z-index: 100;
+    }
+
+    .slide-number {
+      position: fixed;
+      top: 25px;
+      right: 40px;
+      font-size: 1.1rem;
+      color: #aaa;
+      z-index: 100;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="progress" id="progress"></div>
+  <div class="slide-number" id="slideNumber">1 / 3</div>
+
+  <!-- SECCIÓN 1: Historia -->
+  <div class="slide active">
+    <h1>🐱 Gato Tom</h1>
+    <h2>1. Historia del juego</h2>
+    <p>
+      Gato Tom es un divertido juego inspirado en el clásico personaje del gato Tom. 
+      Nació como un juego casual para todas las edades donde el jugador controla a Tom 
+      en diferentes aventuras llenas de acción, persecuciones y momentos cómicos.
+    </p>
+    <img src="images/historia1.jpg" alt="Historia de Gato Tom">
+  </div>
+
+  <!-- SECCIÓN 2: Cómo se juega -->
+  <div class="slide">
+    <h2>2. Cómo se juega</h2>
+    <p>
+      El objetivo principal es ayudar a Tom a completar misiones, atrapar ratones, 
+      evitar obstáculos y recolectar puntos. Usa las flechas del teclado o los 
+      controles táctiles para mover a Tom, saltar y realizar combos especiales.
+    </p>
+    <img src="images/historia2.jpg" alt="Cómo se juega Gato Tom">
+  </div>
+
+  <!-- SECCIÓN 3: Características -->
+  <div class="slide">
+    <h2>3. Características principales</h2>
+    <p>
+      • Gráficos coloridos y animaciones fluidas<br>
+      • Varios niveles con dificultad creciente<br>
+      • Power-ups y habilidades especiales de Tom<br>
+      • Ideal para jugar solo o en modo competitivo
+    </p>
+    <img src="images/historia3.jpg" alt="Características de Gato Tom">
+  </div>
+
+  <!-- Controles -->
+  <div class="controls">
+    <button id="prevBtn" onclick="changeSlide(-1)">← Anterior</button>
+    <button id="nextBtn" onclick="changeSlide(1)">Siguiente →</button>
+  </div>
+
+  <script>
+    let currentSlide = 0;
+    const slides = document.querySelectorAll('.slide');
+    const totalSlides = slides.length;
+    const progress = document.getElementById('progress');
+    const slideNumber = document.getElementById('slideNumber');
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+
+    function showSlide(n) {
+      slides.forEach(slide => slide.classList.remove('active'));
+      slides[n].classList.add('active');
+      
+      // Actualizar barra de progreso
+      progress.style.width = ((n + 1) / totalSlides * 100) + '%';
+      
+      // Actualizar número de diapositiva
+      slideNumber.textContent = (n + 1) + ' / ' + totalSlides;
+      
+      // Habilitar/deshabilitar botones
+      prevBtn.disabled = n === 0;
+      nextBtn.disabled = n === totalSlides - 1;
+    }
+
+    function changeSlide(direction) {
+      currentSlide += direction;
+      if (currentSlide < 0) currentSlide = 0;
+      if (currentSlide >= totalSlides) currentSlide = totalSlides - 1;
+      showSlide(currentSlide);
+    }
+
+    // Navegación con teclado
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight' || e.key === ' ') changeSlide(1);
+      if (e.key === 'ArrowLeft') changeSlide(-1);
+    });
+
+    // Inicializar
+    showSlide(0);
+  </script>
+</body>
+</html>
